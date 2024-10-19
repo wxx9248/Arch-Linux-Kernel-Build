@@ -1,0 +1,47 @@
+name: Check for Updated Git Tag and Trigger Build
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  check_for_new_tag:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_tag: ${{ steps.fetch_latest_tags.outputs.latest_tag }}
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Fetch latest tags
+        id: fetch_latest_tags
+        run: |
+          # Get the latest tag from the repository
+          result=$(curl 'https://archlinux.org/packages/search/json/?name=linux&repo=Core&arch=x86_64')
+          latest_tag=$(echo "$result" | jq -r '.results[0].pkgver')-$(echo "$result" | jq -r '.results[0].pkgrel')
+
+          # Read the last built tag from the 'last-built' file
+          if [ -f last-built ]; then
+            last_built_tag=$(cat last-built)
+            echo "Last built tag: $last_built_tag"
+          else
+            echo "No last-built file found, assuming this is the first run."
+            last_built_tag=""
+          fi
+
+          # Compare the tags
+          if [ "$latest_tag" != "$last_built_tag" ]; then
+            echo "New tag found: $latest_tag"
+            echo "latest_tag=$latest_tag" >>"$GITHUB_OUTPUT"
+          else
+            echo "No new tag found."
+            echo "latest_tag=" >>"$GITHUB_OUTPUT"
+          fi
+  trigger_build_and_release:
+    needs: check_for_new_tag
+    if: ${{ needs.check_for_new_tag.outputs.latest_tag != '' }}
+    uses: ./.github/workflows/build-and-release.yaml
+    with:
+      version: ${{ needs.check_for_new_tag.outputs.latest_tag }}
+    secrets:
+      REPO_DISPATCH_WEBHOOK_TOKEN: ${{ secrets.REPO_DISPATCH_WEBHOOK_TOKEN }}

@@ -1,0 +1,8 @@
+81a82,88
+>   echo "Enabling binderfs..."
+>   scripts/config --enable  CONFIG_ANDROID
+>   scripts/config --enable  CONFIG_ANDROID_BINDER_IPC
+>   scripts/config --enable  CONFIG_ANDROID_BINDERFS
+>   scripts/config --enable  CONFIG_ANDROID_BINDER_IPC_SELFTEST
+>   scripts/config --set-str CONFIG_ANDROID_BINDER_DEVICES ""
+> 

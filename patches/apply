@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e -x
+
+# This script is meat to be called without `cd`
+# Keep current working directory to project root
+
+# Enabling binderfs
+patch workspace/linux/PKGBUILD patches/PKGBUILD.binderfs.patch
