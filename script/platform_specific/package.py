@@ -31,6 +31,9 @@ DISTRO_PACKAGE_NAME_DICT = {
         "python": "python",
         "tar": "tar",
         "xz": "xz",
+        "rust": "rust",
+        "rust-bindgen": "rust-bindgen",
+        "rust-src": "rust-src",
 
         # HTML Docs
         "graphviz": "graphviz",
