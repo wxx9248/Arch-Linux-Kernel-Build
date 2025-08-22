@@ -16,8 +16,16 @@ jobs:
       - name: Fetch latest tags
         id: fetch_latest_tags
         run: |
-          # Get the latest tag from the repository
-          result=$(curl 'https://archlinux.org/packages/search/json/?name=linux&repo=Core&arch=x86_64')
+          # Keep retrying curl until successful
+          while true; do
+            result=$(curl -fsSL 'https://archlinux.org/packages/search/json/?name=linux&repo=Core&arch=x86_64' || true)
+            if [ -n "$result" ]; then
+              break
+            fi
+            echo "curl failed, retrying..."
+            sleep 1
+          done
+
           latest_tag=$(echo "$result" | jq -r '.results[0].pkgver')-$(echo "$result" | jq -r '.results[0].pkgrel')
 
           # Read the last built tag from the 'last-built' file
