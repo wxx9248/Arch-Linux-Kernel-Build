@@ -71,7 +71,7 @@ jobs:
         run: |
           python3 ./script/main.py
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.version }}
           path: ./workspace/linux/linux-*${{ inputs.version }}*.pkg.*
