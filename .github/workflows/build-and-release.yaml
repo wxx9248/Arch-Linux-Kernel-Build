@@ -114,7 +114,7 @@ jobs:
           draft: false
           prerelease: false
           automatic_release_tag: latest
-          files: artifacts/${{ inputs.version }}/linux-*${{ inputs.version }}*.pkg.*
+          files: artifacts/linux-*${{ inputs.version }}*.pkg.*
       - name: Call webhook to update repository
         run: |
           curl -L -f \
