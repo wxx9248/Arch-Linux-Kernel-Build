@@ -4,5 +4,5 @@ docker==7.1.0
 idna==3.13
 packaging==26.2
 requests==2.33.1
-urllib3==2.6.3
+urllib3==2.7.0
 websocket-client==1.9.0
