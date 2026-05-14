@@ -3,6 +3,6 @@ charset-normalizer==3.4.7
 docker==7.1.0
 idna==3.15
 packaging==26.2
-requests==2.34.0
+requests==2.34.1
 urllib3==2.7.0
 websocket-client==1.9.0
