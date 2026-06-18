@@ -42,7 +42,7 @@ jobs:
               /usr/share/swift
           df -h /
       - name: Check-out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Clone Arch Linux packaging repository
@@ -84,7 +84,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Check-out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Download artifacts
