@@ -1,5 +1,5 @@
 certifi==2026.6.17
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
 docker==7.1.0
 idna==3.18
 packaging==26.2
