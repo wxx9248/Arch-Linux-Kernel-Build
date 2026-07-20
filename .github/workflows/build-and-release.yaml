@@ -60,7 +60,7 @@ jobs:
           find . -type f -exec chmod a+rw {} \;
           find . -type d -exec chmod a+rwx {} \;
       - name: Setup Python and pip
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
