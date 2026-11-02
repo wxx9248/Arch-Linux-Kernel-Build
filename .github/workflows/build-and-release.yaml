@@ -64,7 +64,7 @@ jobs:
       - name: Setup Python and pip
         uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: "3.15"
           cache: pip
       - name: Setup Python dependencies
         run: |
