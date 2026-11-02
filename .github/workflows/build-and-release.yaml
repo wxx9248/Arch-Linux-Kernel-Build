@@ -14,6 +14,8 @@ on:
         description: "Version string of kernel to build"
         required: true
         type: string
+permissions:
+  contents: read
 env:
   BUILD_VERSION: ${{ inputs.version }}
   REPO_DISPATCH_WEBHOOK_TOKEN: ${{ secrets.REPO_DISPATCH_WEBHOOK_TOKEN }}
@@ -62,7 +64,7 @@ jobs:
       - name: Setup Python and pip
         uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: "3.15"
           cache: pip
       - name: Setup Python dependencies
         run: |
@@ -87,9 +89,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           submodules: recursive
-      - name: Download artifacts
+      - name: Download artifact
         uses: actions/download-artifact@v8
         with:
+          name: ${{ inputs.version }}
           path: artifacts/
       - name: Update last-built tag
         run: |
@@ -111,13 +114,18 @@ jobs:
           reviewers: |
             wxx9248
       - name: Release
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          draft: false
-          prerelease: false
-          automatic_release_tag: latest
-          files: artifacts/linux-*${{ inputs.version }}*.pkg.*
+        run: |
+          if gh release view latest >/dev/null 2>&1
+          then
+              gh release delete latest --cleanup-tag --yes
+          fi
+          gh release create latest artifacts/linux-*"$BUILD_VERSION"*.pkg.* \
+              --target "$GITHUB_SHA" \
+              --title "latest" \
+              --notes "Automated build of $BUILD_VERSION"
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Call webhook to update repository
         run: |
           curl -L -f \
