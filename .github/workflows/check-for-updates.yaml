@@ -3,6 +3,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   check_for_new_tag:
     runs-on: ubuntu-latest
@@ -48,6 +50,11 @@ jobs:
   trigger_build_and_release:
     needs: check_for_new_tag
     if: ${{ needs.check_for_new_tag.outputs.latest_tag != '' }}
+    # a called workflow can't exceed its caller's permissions; the release job
+    # in build-and-release.yaml needs these to publish and open the tag PR
+    permissions:
+      contents: write
+      pull-requests: write
     uses: ./.github/workflows/build-and-release.yaml
     with:
       version: ${{ needs.check_for_new_tag.outputs.latest_tag }}
