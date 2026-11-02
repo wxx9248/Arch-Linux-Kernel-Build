@@ -1,0 +1,23 @@
+# Weekly update pull requests, one per ecosystem for minor and patch updates;
+# major updates get their own. The cooldown skips releases younger than a day.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /script/
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 1
+    groups:
+      pip:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 1
+    groups:
+      github-actions:
+        update-types: [minor, patch]
